@@ -1,13 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "YOUR_CLIENT_ID"
+client_id = "24b79c870999cf43909a9bd0307659cf"
 name = "shop-chat-agent"
-handle = "shop-chat-agent"
-application_url = "https://shop-chat-agent.com"
+handle = "shop-chat-agent-83"
+application_url = "https://disposition-colour-seminar-isbn.trycloudflare.com"
 embedded = true
 
 [build]
 include_config_on_deploy = true
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2025-04"
@@ -17,12 +18,11 @@ api_version = "2025-04"
 scopes = "customer_read_customers,customer_read_orders,customer_read_store_credit_account_transactions,customer_read_store_credit_accounts,unauthenticated_read_product_listings"
 
 [auth]
-redirect_urls = [ "https://shop-chat-agent.com/api/auth" ]
+redirect_urls = [
+  "https://disposition-colour-seminar-isbn.trycloudflare.com/auth/callback",
+  "https://disposition-colour-seminar-isbn.trycloudflare.com/auth/shopify/callback",
+  "https://disposition-colour-seminar-isbn.trycloudflare.com/api/auth/callback"
+]
 
 [pos]
 embedded = false
-
-[mcp.customer_authentication]
-redirect_uris = [
-  "https://shop-chat-agent.com/callback"
-]
