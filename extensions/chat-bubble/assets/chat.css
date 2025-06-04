@@ -205,6 +205,22 @@
   opacity: 0.8;
 }
 
+.shop-ai-tool-message {
+  color: transparent;
+  max-height: 50px;
+  text-align: center;
+}
+.shop-ai-tool-message::before {
+  content: "Loading data...";
+  display: block;
+  font-weight: 600;
+  color: #606060;
+  margin-bottom: 4px;
+}
+pre {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .shop-ai-message.assistant a,
   .shop-ai-message.user a {

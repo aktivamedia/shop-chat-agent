@@ -371,8 +371,21 @@
         // Process the text with various Markdown features
         let processedText = rawText;
 
-        // Remove code blocks
-        processedText = processedText.replace(/```[\s\S]*?```/g, "");
+        // Detect and render code blocks (e.g., ```json ... ```)
+        processedText = processedText.replace(
+          /```(\w+)?\n?([\s\S]*?)```/g,
+          (match, lang, code) => {
+            // Escape HTML special chars inside code blocks
+            const escapedCode = code
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+            // Add language class if present for syntax highlight libraries (like Prism.js)
+            const languageClass = lang ? ` class="language-${lang}"` : "";
+            return `<pre><code${languageClass} tabindex="0" aria-label="Code block">${escapedCode}</code></pre>`;
+          },
+        );
+
         // Remove '!' from image markdown to treat as normal links
         processedText = processedText.replace(/!\[([^\]]*)\]/g, "[$1]");
         // Process Markdown links
@@ -505,8 +518,8 @@
             }
             if (inLi) {
               if (inUl) {
-          htmlContent += "</ul>";
-          inUl = false;
+                htmlContent += "</ul>";
+                inUl = false;
               }
               htmlContent += "</li>";
             }
@@ -591,8 +604,10 @@
         if (conversationId && conversationId !== "null")
           params.append("responseId", conversationId);
         if (window.shopId) params.append("userId", window.shopId);
-
-        const sseUrl = `https://og-ai-chatbot-production.up.railway.app/agent/stream?${params.toString()}`;
+        // Real URL should be used in production https://og-ai-chatbot-production.up.railway.app/agent/stream?
+        // for local testing use http://0.0.0.0:8000/agent/stream
+        // const sseUrl = `https://og-ai-chatbot-production.up.railway.app/agent/stream?${params.toString()}`;
+        const sseUrl = `http://0.0.0.0:8000/agent/stream?${params.toString()}`;
         const es = new EventSource(sseUrl);
 
         let hasReceivedChunk = false;
@@ -603,7 +618,8 @@
             hasReceivedChunk = true;
           }
           const data = JSON.parse(e.data);
-          currentMessageElement.dataset.rawText += data.delta || data.chunk;
+          const chunk = data.delta || data.chunk;
+          currentMessageElement.dataset.rawText += chunk;
           // Render partial markdown as HTML
           ShopAIChat.Formatting.formatMessageContent(currentMessageElement);
           ShopAIChat.UI.scrollToBottom();
@@ -647,16 +663,18 @@
           es.close();
         });
 
-         es.addEventListener("guardrail.triggered", (e) => {
+        es.addEventListener("guardrail.triggered", (e) => {
           if (currentMessageElement) {
             // Replace the message content with the guardrail message
             const data = JSON.parse(e.data);
-            currentMessageElement.dataset.rawText = data.message || "Sorry, your message could not be processed due to policy restrictions.";
+            currentMessageElement.dataset.rawText =
+              data.message ||
+              "Sorry, your message could not be processed due to policy restrictions.";
             ShopAIChat.Formatting.formatMessageContent(currentMessageElement);
             ShopAIChat.UI.scrollToBottom();
           }
           es.close();
-         })
+        });
 
         // Add more event listeners as needed (auth_required, guardrail.triggered, etc.)
       },
