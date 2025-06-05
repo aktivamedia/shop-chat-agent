@@ -47,7 +47,8 @@
   color: white;
 }
 
-.shop-ai-chat-window {
+.shop-ai-chat-window,
+#shop-ai-chat-terms-and-conditions {
   position: absolute;
   bottom: 80px;
   right: 0;
@@ -73,7 +74,9 @@
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 480px) {
-  .shop-ai-chat-window {
+
+  .shop-ai-chat-window,
+  #shop-ai-chat-terms-and-conditions {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -111,14 +114,17 @@
   }
 }
 
-.shop-ai-chat-window.active {
+.shop-ai-chat-window.active,
+#shop-ai-chat-terms-and-conditions.active {
   opacity: 1;
   pointer-events: all;
   transform: translateY(0);
 }
 
 @media (max-width: 480px) {
-  .shop-ai-chat-window {
+
+  .shop-ai-chat-window,
+  #shop-ai-chat-terms-and-conditions {
     transform: translateY(100%);
     z-index: 999999;
     transition:
@@ -126,7 +132,8 @@
       opacity 0.3s ease;
   }
 
-  .shop-ai-chat-window.active {
+  .shop-ai-chat-window.active,
+  #shop-ai-chat-terms-and-conditions.active {
     transform: translateY(0);
   }
 
@@ -163,7 +170,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
 }
 
 .shop-ai-message {
@@ -210,6 +218,7 @@
   max-height: 50px;
   text-align: center;
 }
+
 .shop-ai-tool-message::before {
   content: "Loading data...";
   display: block;
@@ -217,11 +226,13 @@
   color: #606060;
   margin-bottom: 4px;
 }
+
 pre {
   display: none;
 }
 
 @media (max-width: 480px) {
+
   .shop-ai-message.assistant a,
   .shop-ai-message.user a {
     display: inline-block;
@@ -247,8 +258,8 @@ pre {
 }
 
 /* Nested list styling */
-.shop-ai-message.assistant li > ul,
-.shop-ai-message.assistant li > ol {
+.shop-ai-message.assistant li>ul,
+.shop-ai-message.assistant li>ol {
   margin-top: 6px;
 }
 
@@ -304,7 +315,8 @@ pre {
 
   .shop-ai-chat-input input {
     padding: 10px 14px;
-    font-size: 16px; /* Better for mobile input */
+    font-size: 16px;
+    /* Better for mobile input */
   }
 }
 
@@ -580,12 +592,56 @@ pre {
     opacity: 0.4;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2);
   }
+
   100% {
     opacity: 0.4;
     transform: scale(1);
   }
+}
+
+/* CONDITIONS */
+#shop-ai-chat-terms-and-conditions {
+  max-height: 300px;
+  padding: 20px;
+}
+
+#shop-ai-chat-terms-and-conditions--accept {
+  appearance: unset;
+  background-color: #94773f;
+  color: white;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#shop-ai-chat-terms-and-conditions--accept:hover {
+  background-color: white;
+  color: #94773f;
+  border-color: #94773f;
+}
+
+#shop-ai-chat-terms-and-conditions--cancel {
+  appearance: unset;
+  background-color: white;
+  color: #333;
+  padding: 8px 16px;
+  border: 1px solid rgb(225, 225, 225);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#shop-ai-chat-terms-and-conditions--cancel:hover {
+  border-color: #333;
 }
