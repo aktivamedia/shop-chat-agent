@@ -71,6 +71,15 @@
           chatInput: container.querySelector(".shop-ai-chat-input input"),
           sendButton: container.querySelector(".shop-ai-chat-send"),
           messagesContainer: container.querySelector(".shop-ai-chat-messages"),
+          termsAndConditions: container.querySelector(
+            "#shop-ai-chat-terms-and-conditions",
+          ),
+          acceptTermsAndConditionsBtn: container.querySelector(
+            "#shop-ai-chat-terms-and-conditions--accept",
+          ),
+          cancelTermsAndConditionsBtn: container.querySelector(
+            "#shop-ai-chat-terms-and-conditions--cancel",
+          ),
         };
 
         // Detect mobile device
@@ -95,6 +104,8 @@
           chatInput,
           sendButton,
           messagesContainer,
+          acceptTermsAndConditionsBtn,
+          cancelTermsAndConditionsBtn,
         } = this.elements;
 
         // Toggle chat window visibility
@@ -143,6 +154,16 @@
             }
           }
         });
+
+        acceptTermsAndConditionsBtn.addEventListener("click", () => {
+          sessionStorage.setItem("user-accepted-terms-and-condition", true);
+          this.elements.termsAndConditions.classList.remove("active");
+          this.elements.chatWindow.classList.toggle("active");
+        });
+
+        cancelTermsAndConditionsBtn.addEventListener("click", () => {
+          this.elements.termsAndConditions.classList.remove("active");
+        });
       },
 
       /**
@@ -164,6 +185,15 @@
        */
       toggleChatWindow: function () {
         const { chatWindow, chatInput } = this.elements;
+
+        const hasUserAcceptedTermsAndConditions = sessionStorage.getItem(
+          "user-accepted-terms-and-condition",
+        );
+
+        if (!hasUserAcceptedTermsAndConditions) {
+          this.elements.termsAndConditions.classList.add("active");
+          return;
+        }
 
         chatWindow.classList.toggle("active");
 
