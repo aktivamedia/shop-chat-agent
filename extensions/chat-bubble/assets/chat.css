@@ -606,8 +606,37 @@ pre {
 
 /* CONDITIONS */
 #shop-ai-chat-terms-and-conditions {
-  max-height: 300px;
-  padding: 20px;
+  max-width: 350px;
+  max-height: 275px;
+  min-height: 275px;
+  padding: 8px;
+}
+
+@media (max-width: 480px) {
+  #shop-ai-chat-terms-and-conditions {
+    min-height: 300px;
+    max-height: 300px;
+    max-width: 300px;
+    right: 2%;
+    left: unset;
+    transform: translateY(160%) !important;
+    border-radius: 16px;
+  }
+}
+
+#shop-ai-chat-terms-and-conditions h3 {
+  font-size: 18px;
+  margin: 0px;
+}
+
+#shop-ai-chat-terms-and-conditions p {
+  font-size: 14px;
+}
+
+#shop-ai-chat-terms-and-conditions--buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 #shop-ai-chat-terms-and-conditions--accept {
