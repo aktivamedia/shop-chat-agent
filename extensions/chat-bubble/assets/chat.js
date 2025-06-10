@@ -640,8 +640,8 @@
         if (shopAiSessionId) params.append("sessionId", shopAiSessionId);
         // Real URL should be used in production https://og-ai-chatbot-production.up.railway.app/agent/stream?
         // for local testing use http://0.0.0.0:8000/agent/stream
-        // const sseUrl = `https://og-ai-chatbot-production.up.railway.app/agent/stream?${params.toString()}`;
-        const sseUrl = `http://0.0.0.0:8000/agent/stream?${params.toString()}`;
+        const sseUrl = `https://og-ai-chatbot-production.up.railway.app/agent/stream?${params.toString()}`;
+        // const sseUrl = `http://0.0.0.0:8000/agent/stream?${params.toString()}`;
         const es = new EventSource(sseUrl);
 
         let hasReceivedChunk = false;
