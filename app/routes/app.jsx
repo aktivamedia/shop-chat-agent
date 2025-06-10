@@ -22,8 +22,8 @@ export default function App() {
         <Link to="/app" rel="home">
           Home
         </Link>
-        <Link to="/app/messages">
-          Messages
+        <Link to="/app/sessions">
+          Sessions
         </Link>
       </NavMenu>
       <Outlet />

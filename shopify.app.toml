@@ -3,7 +3,7 @@
 client_id = "24b79c870999cf43909a9bd0307659cf"
 name = "shop-chat-agent"
 handle = "shop-chat-agent-83"
-application_url = "https://merger-seed-republicans-vic.trycloudflare.com"
+application_url = "https://hk-cheapest-informative-otherwise.trycloudflare.com"
 embedded = true
 
 [build]
@@ -19,9 +19,9 @@ scopes = "customer_read_customers,customer_read_orders,customer_read_store_credi
 
 [auth]
 redirect_urls = [
-  "https://merger-seed-republicans-vic.trycloudflare.com/auth/callback",
-  "https://merger-seed-republicans-vic.trycloudflare.com/auth/shopify/callback",
-  "https://merger-seed-republicans-vic.trycloudflare.com/api/auth/callback"
+  "https://hk-cheapest-informative-otherwise.trycloudflare.com/auth/callback",
+  "https://hk-cheapest-informative-otherwise.trycloudflare.com/auth/shopify/callback",
+  "https://hk-cheapest-informative-otherwise.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
