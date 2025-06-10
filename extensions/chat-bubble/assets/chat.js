@@ -331,6 +331,7 @@
             userMessage,
             conversationId,
             messagesContainer,
+            shopAiSessionId,
           );
         } catch (error) {
           console.error("Error communicating with Claude API:", error);
@@ -616,11 +617,13 @@
        * @param {string} userMessage - User's message text
        * @param {string} conversationId - Conversation ID for context
        * @param {HTMLElement} messagesContainer - The messages container
+       * @param {string} shopAiSessionId - Session ID for tracking
        */
       streamResponse: function (
         userMessage,
         conversationId,
         messagesContainer,
+        shopAiSessionId
       ) {
         let currentMessageElement = document.createElement("div");
         currentMessageElement.classList.add("shop-ai-message", "assistant");
@@ -634,6 +637,7 @@
         if (conversationId && conversationId !== "null")
           params.append("responseId", conversationId);
         if (window.shopId) params.append("userId", window.shopId);
+        if (shopAiSessionId) params.append("sessionId", shopAiSessionId);
         // Real URL should be used in production https://og-ai-chatbot-production.up.railway.app/agent/stream?
         // for local testing use http://0.0.0.0:8000/agent/stream
         // const sseUrl = `https://og-ai-chatbot-production.up.railway.app/agent/stream?${params.toString()}`;
