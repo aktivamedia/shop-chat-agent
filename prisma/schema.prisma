@@ -9,8 +9,8 @@ generator client {
 // enough when changing adapters.
 // See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
@@ -54,21 +54,23 @@ model CodeVerifier {
 }
 
 model Conversation {
-  id        String    @id
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       // "user" or "assistant"
-  content        String
-  createdAt      DateTime     @default(now())
+  id           Int      @id @default(autoincrement())
+  sessionId    String   @map("session_id")
+  userId       String   @map("user_id")
+  inputMessage String   @map("input_message")
+  response     String
+  responseId   String?  @map("response_id")
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  @@index([conversationId])
+  @@index([sessionId])
+  @@index([userId])
+  @@map("messages")
 }
 
 model CustomerAccountUrl {
