@@ -7,10 +7,14 @@ import {
   InlineStack,
   Badge,
   Link,
+  Button,
+  FormLayout,
+  TextField,
 } from "@shopify/polaris";
 import { useLoaderData, Link as RemixLink } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
+import ReactMarkdown from "react-markdown";
 
 // Loader: Fetch all messages for the provided sessionId
 export const loader = async ({ params, request }) => {
@@ -31,7 +35,7 @@ export const loader = async ({ params, request }) => {
 
 export default function SessionDetail() {
   const { sessionId, messages } = useLoaderData();
-
+  const createdAt = messages[0]?.createdAt;
   return (
     <Page>
       <BlockStack gap="500">
@@ -42,7 +46,10 @@ export default function SessionDetail() {
               <BlockStack gap="500">
                 {/* Navigation / header */}
                 <InlineStack align="space-between">
-                  <RemixLink to="/app/sessions" style={{ textDecoration: "none" }}>
+                  <RemixLink
+                    to="/app/sessions"
+                    style={{ textDecoration: "none" }}
+                  >
                     <Text variant="bodyMd" as="span">
                       ← Back to sessions
                     </Text>
@@ -52,9 +59,6 @@ export default function SessionDetail() {
 
                 {/* Session ID and info */}
                 <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Session – <span style={{ wordBreak: "break-all" }}>{sessionId}</span>
-                  </Text>
                   <Text variant="bodyMd" as="p">
                     Conversation log for this chat agent session.
                   </Text>
@@ -64,26 +68,82 @@ export default function SessionDetail() {
                 <BlockStack gap="300">
                   {messages.map((msg) => {
                     const ts = msg.createdAt
-                      ? new Date(msg.createdAt).toLocaleString()
+                      ? new Date(msg.createdAt).toLocaleTimeString()
                       : "Unknown time";
                     return (
-                      <Card sectioned key={msg.id} style={{ background: "#f9fafb" }}>
-                        <BlockStack gap="100">
-                          <InlineStack align="space-between">
-                            <Text variant="bodyMd" as="span">
-                              <strong>User:</strong> {msg.input_message}
-                            </Text>
-                            <Text variant="caption" as="span" aria-label="Message timestamp">
-                              {ts}
-                            </Text>
-                          </InlineStack>
-                          <InlineStack align="space-between" style={{ marginTop: 8 }}>
-                            <Text variant="bodyMd" as="span">
-                              <strong>Agent:</strong> {msg.response}
-                            </Text>
-                          </InlineStack>
-                        </BlockStack>
-                      </Card>
+                      <>
+                        <Card
+                          sectioned
+                          key={msg.id}
+                          background="bg-surface-emphasis"
+                        >
+                          <BlockStack gap="100">
+                            <InlineStack align="start">
+                              <Text variant="bodyMd" as="span">
+                                {msg.inputMessage}
+                              </Text>
+                            </InlineStack>
+                          </BlockStack>
+                          <BlockStack gap="100">
+                            <InlineStack align="end">
+                              <Badge status="info">
+                                <strong>👤 User</strong> - {ts}
+                              </Badge>
+                            </InlineStack>
+                          </BlockStack>
+                        </Card>
+                        <Card
+                          sectioned
+                          key={msg.id}
+                          background="bg-surface-info"
+                        >
+                          <ReactMarkdown
+                            components={{
+                              img: ({ node, ...props }) => (
+                                <img
+                                  {...props}
+                                  style={{
+                                    maxWidth: "150px",
+                                    height: "auto",
+                                    ...props.style,
+                                  }}
+                                  alt={props.alt || ""}
+                                  aria-label={props.alt || "Chat image"}
+                                />
+                              ),
+                              a: ({ node, ...props }) => (
+                                <a
+                                  {...props}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  aria-label={props.children}
+                                >
+                                  {props.children}
+                                </a>
+                              ),
+                            }}
+                          >
+                            {msg.response}
+                          </ReactMarkdown>
+
+                          <BlockStack gap="100">
+                            <InlineStack align="end">
+                              <Badge status="info">
+                                <strong>
+                                  🤖{" "}
+                                  <Link
+                                    url={`https://platform.openai.com/logs/${msg.responseId}`}
+                                    target="_blank"
+                                  >
+                                    agent
+                                  </Link>
+                                </strong>{" "}
+                                - {ts}
+                              </Badge>
+                            </InlineStack>
+                          </BlockStack>
+                        </Card>
+                      </>
                     );
                   })}
                 </BlockStack>
@@ -100,26 +160,48 @@ export default function SessionDetail() {
                     Session details
                   </Text>
                   <Text variant="bodyMd" as="p">
-                    You are viewing all user & agent messages for this chat session.
+                    Session ID:{" "}
+                    <span style={{ wordBreak: "break-all" }}>{sessionId}</span>
                   </Text>
-                  <Text variant="bodySm" as="span">
-                    Use the “Back to sessions” link to view more sessions.
+                  <Text variant="bodyMd" as="p">
+                    Started on:{" "}
+                    <span style={{ wordBreak: "break-all" }}>
+                      {new Date(createdAt).toLocaleString()}
+                    </span>
                   </Text>
                 </BlockStack>
               </Card>
               <Card>
                 <BlockStack gap="200">
                   <Text as="h2" variant="headingMd">
-                    Accessibility
+                    Add new FAQ
                   </Text>
-                  <BlockStack gap="100">
-                    <Text as="span" variant="bodyMd">
-                      • Timestamps for each message.
-                    </Text>
-                    <Text as="span" variant="bodyMd">
-                      • Message roles (User/Agent) are labeled.
-                    </Text>
-                  </BlockStack>
+                  <FormLayout>
+                    <TextField
+                      label="Question"
+                      onChange={() => {}}
+                      autoComplete="off"
+                      multiline={2}
+                    />
+                    <TextField
+                      label="Answer"
+                      onChange={() => {}}
+                      autoComplete="off"
+                      multiline={4}
+                    />
+                    <Button variant="primary" size="large">
+                      Save
+                    </Button>
+                  </FormLayout>
+                </BlockStack>
+              </Card>
+              <Card>
+                <BlockStack gap="200">
+                  <InlineStack gap="100">
+                    <Button variant="primary" size="large" tone="critical">
+                      Delete session
+                    </Button>
+                  </InlineStack>
                 </BlockStack>
               </Card>
             </BlockStack>
